@@ -36,12 +36,13 @@ jobs:
         id: get_ref
         run: |
           TAG_MSG=$(git tag -l --format='%(contents)' ${{ github.ref_name }})
-          TARGET_REF=$(echo "$TAG_MSG" | grep -oP 'ref: \K[a-zA-Z0-9]+')          
+          echo "DEBUG: 标签 $TAG_NAME 的内容是: [$TAG_MSG]"
+          TARGET_REF=$(echo "$TAG_MSG" | grep -oP 'ref: \K[a-zA-Z0-9]+')
           if [ -z "$TARGET_REF" ]; then
             echo "错误: 未在标签描述中找到 'ref: <sha>'，请检查标签内容。"
-            exit 1
+            exit 2026
           fi
-          
+          echo "DEBUG: 解析出的 TARGET_REF 是: [$TARGET_REF]"
           echo "target_ref=$TARGET_REF" >> $GITHUB_OUTPUT
           echo "Found target ref: $TARGET_REF"
 
