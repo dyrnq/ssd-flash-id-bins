@@ -29,7 +29,9 @@ jobs:
       - name: Checkout Current Repo (Metadata)
         uses: actions/checkout@v4
         with:
-          fetch-tags: true
+          #fetch-tags: true
+          ref: ${{ github.ref }}
+          fetch-depth: 0
       - name: Fetch Metadata from Tag
         id: get_ref
         run: |
