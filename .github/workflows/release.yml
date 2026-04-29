@@ -26,7 +26,10 @@ jobs:
     steps:
       - name: Debug Context
         run: echo '${{ toJson(github) }}'
-
+      - name: Checkout Current Repo (Metadata)
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: true
       - name: Fetch Metadata from Tag
         id: get_ref
         run: |
@@ -40,11 +43,14 @@ jobs:
           echo "target_ref=$TARGET_REF" >> $GITHUB_OUTPUT
           echo "Found target ref: $TARGET_REF"
 
-      - name: Checkout Code
+
+
+      - name: Checkout Target Repo
         uses: actions/checkout@v4
         with:
           repository: pseudolabel/ssd-flash-id
-          ref: ${{ steps.get_ref.outputs.target_ref }}
+          path: external_source
+          ref: ${{ steps.parse_tag.outputs.target_ref }}
           fetch-depth: 1
 
       - name: Install Rust Toolchain
@@ -56,12 +62,13 @@ jobs:
         run: cargo install cross
         
       - name: Compile Release
+        working-directory: external_source
         run: cross build --target ${{ matrix.target }} --release
         
       - name: Prepare Artifact
         run: |
           mkdir -p build_output
-          mv target/${{ matrix.target }}/release/ssd-flash-id build_output/${{ matrix.artifact_name }}
+          mv external_source/target/${{ matrix.target }}/release/ssd-flash-id build_output/${{ matrix.artifact_name }}
           
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
