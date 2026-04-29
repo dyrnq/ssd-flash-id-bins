@@ -18,10 +18,10 @@ jobs:
             artifact_name: ssd-flash-id_amd64
           - target: aarch64-unknown-linux-gnu
             artifact_name: ssd-flash-id_arm64
-          - target: x86_64-unknown-linux-musl
-            artifact_name: ssd-flash-id_amd64-musl
-          - target: aarch64-unknown-linux-musl
-            artifact_name: ssd-flash-id_arm64-musl
+          # - target: x86_64-unknown-linux-musl
+          #   artifact_name: ssd-flash-id_amd64-musl
+          # - target: aarch64-unknown-linux-musl
+          #   artifact_name: ssd-flash-id_arm64-musl
     
     steps:
       - name: Debug Context
